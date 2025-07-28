@@ -46,6 +46,7 @@ exports.register = async (req, res) => {
 };
 
 // Login User
+// Login User
 exports.login = async (req, res) => {
     try {
         const { nis_or_nip, password } = req.body;
@@ -58,6 +59,14 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(401).json({ message: 'Password salah' });
 
+        // Ambil data tambahan sesuai role
+        let detail = null;
+        if (user.role === 'siswa') {
+            detail = await Siswa.findOne({ where: { user_id: user.user_id } });
+        } else if (user.role === 'guru') {
+            detail = await Guru.findOne({ where: { user_id: user.user_id } });
+        }
+
         // Generate JWT
         const token = jwt.sign(
             { user_id: user.user_id, role: user.role },
@@ -65,7 +74,13 @@ exports.login = async (req, res) => {
             { expiresIn: '1d' }
         );
 
-        res.json({ message: 'Login berhasil', token, role: user.role, name: user.name });
+        res.json({
+            message: 'Login berhasil',
+            token,
+            role: user.role,
+            name: user.name,
+            detail: detail || null
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Terjadi kesalahan server', error: error.message });

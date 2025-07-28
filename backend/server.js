@@ -30,4 +30,4 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server berjalan di http://localhost:${PORT}/api-docs`));
+app.listen(PORT, () => console.log(`Server berjalan di http://192.168.193.51:${PORT}/api-docs`));

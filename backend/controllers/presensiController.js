@@ -72,7 +72,6 @@ function getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
 }
 
 
-
 // ✅ GET - Ambil Presensi User Login
 exports.getAll = async (req, res) => {
     try {
